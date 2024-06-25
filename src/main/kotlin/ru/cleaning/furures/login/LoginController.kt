@@ -13,9 +13,7 @@ class LoginController(private val call: ApplicationCall) {
 
     suspend fun performLogin() {
         val receive = call.receive<LoginReceiveRemote>()
-        println("receive -> $receive")
         val userDTO = Users.fetchUser(receive.login)
-        println("dto -> $userDTO")
 
 
         if (userDTO == null) {

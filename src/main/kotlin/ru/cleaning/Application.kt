@@ -1,13 +1,14 @@
 package ru.cleaning
 
 import io.ktor.server.application.*
-import io.ktor.server.cio.*
 import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import org.jetbrains.exposed.sql.Database
 import ru.cleaning.furures.companies.configureCompaniesRouting
 import ru.cleaning.furures.login.configureLoginRouting
 import ru.cleaning.furures.register.configureRegisterRouting
-import ru.cleaning.plugins.*
+import ru.cleaning.plugins.configureRouting
+import ru.cleaning.plugins.configureSerialization
 
 fun main() {
     Database.connect(
@@ -18,10 +19,12 @@ fun main() {
     )
 
 
-    embeddedServer(CIO, port = 8080, host = "0.0.0.0", module = Application::module).start(wait = true)
+    embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module).start (wait = true)
 }
 
 fun Application.module() {
+
+
 //    configureSockets()
     configureLoginRouting()
     configureRegisterRouting()

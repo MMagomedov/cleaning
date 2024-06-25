@@ -1,4 +1,3 @@
-
 val kotlin_version: String by project
 val logback_version: String by project
 val exposed_version: String by project
@@ -7,6 +6,12 @@ plugins {
     kotlin("jvm") version "2.0.0"
     id("io.ktor.plugin") version "2.3.11"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 group = "ru.cleaning"
@@ -38,4 +43,17 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
 
     implementation("org.postgresql:postgresql:42.2.2")
+
+
+    implementation("io.ktor:ktor-server-netty:2.0.0") // Netty server
+}
+
+tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes(
+            "Main-Class" to "ru.cleaning.ApplicationKt"
+        )
+    }
+    from(configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) })
 }
